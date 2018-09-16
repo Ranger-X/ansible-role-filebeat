@@ -21,4 +21,12 @@
     state: started
   when: filebeat_start_at_boot
 
+# we need to disable Filebeat at boot on certain cases, such as Filebeat managed by Graylog Sidecar
+- name: Ensure Filebeat is DISABLED and stopped at boot
+  service:
+    name: filebeat
+    enabled: no
+    state: stopped
+  when: not filebeat_start_at_boot
+
 # vi:ts=2:sw=2:et:ft=yaml

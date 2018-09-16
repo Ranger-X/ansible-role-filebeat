@@ -1,5 +1,21 @@
 ---
 
+# common tasks for all of OSes
+- name: Create filebeat group {{ filebeat_group }}
+  group:
+    name: '{{ filebeat_group }}'
+  when: filebeat_create_user and filebeat_group != 'root'
+
+- name: Create filebeat user {{ filebeat_user }}
+  user:
+    name: '{{ filebeat_user }}'
+    shell: /bin/true
+    create_home: false
+    home: /dev/null
+    comment: User for filebeat
+    group: '{{ filebeat_group }}'
+  when: filebeat_create_user and filebeat_user != 'root'
+
 - include: install/Debian.yml
   when: ansible_os_family == 'Debian'
 

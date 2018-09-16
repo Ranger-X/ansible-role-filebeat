@@ -23,6 +23,7 @@ filebeat_repo_baseurl:    "{{filebeat_baseurl}}/packages/{{filebeat_version_repo
 filebeat_package_baseurl: "{{filebeat_baseurl}}/downloads/beats/filebeat"
 
 filebeat_arch: "{{ (ansible_architecture == 'x86_64') | ternary('amd64', 'i386') }}"
+filebeat_dpkg_options: 'force-confdef,force-confold'
 
 # Filebeat Solaris url
 #

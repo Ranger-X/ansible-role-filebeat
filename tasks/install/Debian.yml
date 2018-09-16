@@ -1,5 +1,12 @@
 ---
 
+- name: Add {{ filebeat_user }} to adm group
+  user:
+    name: '{{ filebeat_user }}'
+    groups: adm
+    append: true
+  when: filebeat_create_user and filebeat_user != 'root'
+
 - block:
 
   - name: Elastic APT Key
@@ -17,6 +24,7 @@
     apt:
       state: "{{ (filebeat_upgrade) | ternary('latest', 'present') }}"
       name: "{{filebeat_package}}"
+      dpkg_options: "{{ filebeat_dpkg_options }}"
     notify: filebeat restart
 
   when: filebeat_use_repo
@@ -31,6 +39,7 @@
   - name: Install FileBeat DEB
     apt:
       deb: "/var/cache/apt/archives/filebeat-{{filebeat_version}}-amd64.deb"
+      dpkg_options: "{{ filebeat_dpkg_options }}"
       state: present
     notify: filebeat restart
 
